@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AVAFS – Tu Broker Automotriz de Confianza</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap');
+
+    :root {
+      --bg: #050507;
+      --bg-2: #0b0c10;
+      --accent: #2d72f4;
+      --accent-2: #6ea0ff;
+      --accent-3: #1456e0;
+      --card: #0f1015;
+      --card-2: #16171d;
+      --border: rgba(110,160,255,0.14);
+      --border-strong: rgba(110,160,255,0.35);
+      --fg: #e8eaed;
+      --fg-muted: #9aa0a6;
+      --fg-dim: #5f6368;
+    }
+    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; margin: 0; padding: 0; }
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    .font-display { font-family: 'Sora', sans-serif; letter-spacing: -0.02em; }
+    .gold-text {
+      background: linear-gradient(135deg, #e8eaed 0%, #6ea0ff 50%, #2d72f4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .shine-text {
+      background: linear-gradient(90deg, var(--fg) 0%, var(--accent-2) 50%, var(--fg) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 6s linear infinite;
+    }
+    @keyframes shine { 0%{background-position:-200% center} 100%{background-position:200% center} }
+
+    .grid-pattern {
+      background-image:
+        linear-gradient(rgba(110,160,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(110,160,255,0.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+
+    @keyframes float-blob-1 {
+      0%,100%{transform:translate(0,0) scale(1)}
+      33%{transform:translate(50px,-40px) scale(1.1)}
+      66%{transform:translate(-30px,30px) scale(0.95)}
+    }
+    @keyframes float-blob-2 {
+      0%,100%{transform:translate(0,0) scale(1)}
+      50%{transform:translate(-60px,40px) scale(1.15)}
+    }
+    .blob-1 { animation: float-blob-1 24s ease-in-out infinite; }
+    .blob-2 { animation: float-blob-2 30s ease-in-out infinite; }
+
+    @keyframes float-a {
+      0%,100%{transform:translateY(0) rotate(0deg)}
+      40%{transform:translateY(-10px) rotate(0.4deg)}
+      70%{transform:translateY(-5px) rotate(-0.2deg)}
+    }
+    .float-hero { animation: float-a 7s ease-in-out infinite; }
+
+    @keyframes road-move { 0%{background-position:0 0} 100%{background-position:-200px 0} }
+    .road-stripes {
+      background-image: repeating-linear-gradient(90deg,rgba(110,160,255,0.5) 0px,rgba(110,160,255,0.5) 60px,transparent 60px,transparent 120px);
+      animation: road-move 1.2s linear infinite;
+    }
+
+    @keyframes speed-streak {
+      0%{transform:translateX(-200px);opacity:0}
+      20%{opacity:1}
+      100%{transform:translateX(600px);opacity:0}
+    }
+    .speed-streak { animation: speed-streak 4s linear infinite; }
+
+    @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .marquee-track { animation: marquee 35s linear infinite; display:flex; }
+
+    .service-card {
+      position:relative; overflow:hidden;
+      transition:all .5s cubic-bezier(.16,1,.3,1);
+      background:var(--card); border:1px solid var(--border);
+      border-radius:1rem;
+    }
+    .service-card:hover {
+      transform:translateY(-10px);
+      border-color:var(--border-strong);
+      box-shadow:0 32px 64px -20px rgba(0,0,0,.7),0 0 50px -10px rgba(45,114,244,.2);
+    }
+    .service-card::after {
+      content:'';position:absolute;top:0;left:0;width:100%;height:2px;
+      background:linear-gradient(90deg,transparent,var(--accent),transparent);
+      transform:translateX(-100%);transition:transform .7s ease;
+    }
+    .service-card:hover::after { transform:translateX(100%); }
+
+    .why-card {
+      background:var(--card); border:1px solid var(--border); border-radius:1rem; padding:1.75rem;
+      transition:all .5s cubic-bezier(.16,1,.3,1);
+    }
+    .why-card:hover {
+      transform:translateY(-12px) !important;
+      border-color:var(--border-strong) !important;
+      box-shadow:0 24px 48px -15px rgba(45,114,244,.2);
+    }
+
+    @keyframes why-float-1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    @keyframes why-float-2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+    @keyframes why-float-3 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    .why-1{animation:why-float-1 6s ease-in-out infinite;}
+    .why-2{animation:why-float-2 7s ease-in-out infinite 0.5s;}
+    .why-3{animation:why-float-3 5.5s ease-in-out infinite 1s;}
+    .why-4{animation:why-float-1 7.5s ease-in-out infinite 1.5s;}
+    .why-5{animation:why-float-2 6s ease-in-out infinite 0.3s;}
+    .why-6{animation:why-float-3 8s ease-in-out infinite 0.8s;}
+
+    @keyframes proc-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+    .process-step { animation:proc-float 5.5s ease-in-out infinite; transition:all .3s; }
+    .process-step:nth-child(2){animation-delay:.7s}
+    .process-step:nth-child(3){animation-delay:1.4s}
+    .process-step:nth-child(4){animation-delay:2.1s}
+    .process-step:hover { animation-play-state:paused; }
+
+    @keyframes stat-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+    .stat-item { animation:stat-float 5s ease-in-out infinite; }
+    .stat-item:nth-child(2){animation-delay:.6s}
+    .stat-item:nth-child(3){animation-delay:1.2s}
+    .stat-item:nth-child(4){animation-delay:1.8s}
+
+    .btn-primary {
+      position:relative; overflow:hidden;
+      background:var(--accent); color:#050507;
+      transition:all .3s; font-weight:700;
+      display:inline-flex; align-items:center; gap:.5rem;
+      border-radius:.75rem; padding:.875rem 1.75rem; font-size:.95rem;
+      cursor:pointer; border:none; text-decoration:none;
+      font-family:'Manrope',sans-serif;
+    }
+    .btn-primary:hover { transform:translateY(-2px); box-shadow:0 12px 30px -8px rgba(45,114,244,.6); }
+    .btn-ghost {
+      position:relative; border:1px solid var(--border-strong);
+      color:var(--fg); transition:all .3s; font-weight:500; background:rgba(45,114,244,.02);
+      display:inline-flex; align-items:center; gap:.5rem;
+      border-radius:.75rem; padding:.875rem 1.75rem; font-size:.95rem;
+      cursor:pointer; text-decoration:none; font-family:'Manrope',sans-serif;
+    }
+    .btn-ghost:hover { background:rgba(45,114,244,.08); border-color:var(--accent); color:var(--accent-2); }
+
+    @keyframes wa-bounce { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-6px) scale(1.05)} }
+    .wa-fab {
+      position:fixed; bottom:1.5rem; right:1.5rem; z-index:50;
+      width:3.5rem; height:3.5rem; border-radius:50%;
+      background:linear-gradient(135deg,#25d366,#128c7e);
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 8px 32px -8px rgba(37,211,102,.6);
+      animation:wa-bounce 3s ease-in-out infinite;
+      cursor:pointer; text-decoration:none; border:none;
+    }
+    .wa-fab:hover { animation-play-state:paused; transform:scale(1.12) !important; }
+
+    .input-field {
+      background:rgba(255,255,255,.02); border:1px solid var(--border);
+      color:var(--fg); transition:all .3s; font-family:'Manrope',sans-serif;
+      border-radius:.75rem; padding:.875rem 1.1rem; width:100%; font-size:.95rem;
+    }
+    .input-field::placeholder { color:var(--fg-dim); }
+    .input-field:focus { outline:none; border-color:var(--accent); background:rgba(45,114,244,.04); box-shadow:0 0 0 3px rgba(45,114,244,.1); }
+
+    .section-divider { height:1px; background:linear-gradient(90deg,transparent,var(--border-strong),transparent); margin:0 2rem; }
+
+    .accordion-content { max-height:0; overflow:hidden; transition:max-height .6s cubic-bezier(.16,1,.3,1); }
+    .accordion-open .accordion-content { max-height:400px; }
+
+    .tag-pill {
+      background:rgba(45,114,244,.08); border:1px solid var(--border);
+      color:var(--accent-2); font-size:11px; letter-spacing:.1em;
+      font-weight:600; text-transform:uppercase;
+      display:inline-flex; align-items:center; padding:.25rem .75rem; border-radius:9999px;
+    }
+
+    .testimonial-card {
+      background:var(--card-2); border:1px solid var(--border); border-radius:1.25rem; padding:2rem;
+      flex:0 0 100%; transition:all .3s;
+    }
+
+    @keyframes pulse-ring { 0%{transform:scale(.8);opacity:1} 100%{transform:scale(2.5);opacity:0} }
+    .pulse-dot { position:relative; }
+    .pulse-dot::before {
+      content:''; position:absolute; inset:0; border-radius:50%;
+      background:var(--accent); animation:pulse-ring 2.5s ease-out infinite;
+    }
+
+    @keyframes reveal-up { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+    .reveal-anim { animation:reveal-up .9s cubic-bezier(.16,1,.3,1) both; }
+
+    ::-webkit-scrollbar { width:8px; }
+    ::-webkit-scrollbar-track { background:#000; }
+    ::-webkit-scrollbar-thumb { background:#1456e0; border-radius:4px; }
+    ::-webkit-scrollbar-thumb:hover { background:#2d72f4; }
+
+    .contact-link {
+      color: var(--accent-2);
+      text-decoration: none;
+      font-size: .95rem;
+      transition: color .2s;
+    }
+    .contact-link:hover {
+      color: var(--fg);
+      text-decoration: underline;
+    }
+
+    .coverage-pin {
+      position:absolute; width:14px; height:14px; background:var(--accent); border-radius:50%;
+      box-shadow:0 0 0 4px rgba(45,114,244,.25),0 0 20px rgba(45,114,244,.6);
+      cursor:pointer; transition:all .3s;
+    }
+    .coverage-pin:hover { transform:scale(1.5); }
+    .coverage-pin.future { background:#5f6368; box-shadow:0 0 0 4px rgba(95,99,104,.2); }
+    @keyframes pin-pulse {
+      0%,100%{box-shadow:0 0 0 4px rgba(45,114,244,.25),0 0 20px rgba(45,114,244,.6)}
+      50%{box-shadow:0 0 0 8px rgba(45,114,244,.15),0 0 35px rgba(45,114,244,.8)}
+    }
+    .active-pin { animation:pin-pulse 2s ease-in-out infinite; }
+
+    @media (max-width: 768px) {
+      .hero-grid { grid-template-columns: 1fr !important; }
+      .hidden-mobile { display: none !important; }
+      .show-mobile { display: flex !important; }
+    }
+    @media (min-width: 769px) {
+      .show-mobile { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- WhatsApp FAB -->
+  <a href="https://wa.me/525525374608?text=%C2%A1Hola%21%20Me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20sobre%3A" target="_blank" rel="noreferrer" class="wa-fab" title="Escríbenos por WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <!-- NAV -->
+  <nav id="main-nav" style="position:fixed;top:0;left:0;right:0;z-index:50;transition:all .5s;background:transparent;border-bottom:none;">
+    <div style="max-width:1280px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:4.5rem;">
+      <button onclick="scrollToSection('inicio')" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:.75rem;">
+        <img src="data:image/png;base64,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" alt="AVAFS" style="height:44px;width:auto;object-fit:contain;" />
+      </button>
+      <div style="display:flex;gap:2rem;align-items:center;" class="hidden-mobile" id="nav-links">
+        <button onclick="scrollToSection('servicios')" class="nav-link-btn">Servicios</button>
+        <button onclick="scrollToSection('por-que')" class="nav-link-btn">Por qué AVAFS</button>
+        <button onclick="scrollToSection('proceso')" class="nav-link-btn">Proceso</button>
+        <button onclick="scrollToSection('cobertura')" class="nav-link-btn">Cobertura</button>
+        <button onclick="scrollToSection('faq')" class="nav-link-btn">FAQ</button>
+        <button onclick="scrollToSection('contacto')" class="nav-link-btn">Contacto</button>
+        <button onclick="scrollToSection('contacto')" class="btn-primary" style="padding:.5rem 1.25rem;font-size:.85rem;">Contactar</button>
+      </div>
+      <button onclick="openMenu()" style="display:none;background:none;border:none;color:#e8eaed;cursor:pointer;" class="show-mobile">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" style="display:none;position:fixed;inset:0;z-index:100;background:#050507;padding:2rem 1.5rem;">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:2rem;">
+      <button onclick="closeMenu()" style="background:none;border:none;color:#e8eaed;cursor:pointer;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1.5rem;">
+      <button onclick="scrollToSection('servicios')" class="mobile-nav-btn">Servicios</button>
+      <button onclick="scrollToSection('por-que')" class="mobile-nav-btn">Por qué AVAFS</button>
+      <button onclick="scrollToSection('proceso')" class="mobile-nav-btn">Proceso</button>
+      <button onclick="scrollToSection('cobertura')" class="mobile-nav-btn">Cobertura</button>
+      <button onclick="scrollToSection('faq')" class="mobile-nav-btn">FAQ</button>
+      <button onclick="scrollToSection('contacto')" class="mobile-nav-btn">Contacto</button>
+      <button onclick="scrollToSection('contacto')" class="btn-primary" style="margin-top:1rem;">Contactar ahora</button>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section id="inicio" style="min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding-top:6rem;">
+    <div style="position:absolute;inset:0;z-index:0;">
+      <img src="https://images.unsplash.com/photo-1553440569-bcc63803a83d?w=1600&q=80&fit=crop" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.08;" />
+      <div class="grid-pattern" style="position:absolute;inset:0;opacity:.4;"></div>
+      <div class="blob-1" style="position:absolute;top:20%;left:-10rem;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(45,114,244,.15) 0%,transparent 70%);"></div>
+      <div class="blob-2" style="position:absolute;bottom:20%;right:-10rem;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(110,160,255,.12) 0%,transparent 70%);"></div>
+    </div>
+    <div style="max-width:1280px;margin:0 auto;padding:4rem 1.5rem;position:relative;z-index:10;width:100%;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;" class="hero-grid">
+        <!-- Left -->
+        <div class="reveal-anim">
+          <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(45,114,244,.08);border:1px solid rgba(110,160,255,.25);border-radius:9999px;padding:.375rem 1rem;margin-bottom:1.5rem;">
+            <div class="pulse-dot" style="width:8px;height:8px;border-radius:50%;background:#2d72f4;position:relative;flex-shrink:0;"></div>
+            <span style="font-size:.8rem;color:#6ea0ff;font-weight:600;letter-spacing:.05em;">Tu Broker Automotriz de Confianza</span>
+          </div>
+          <h1 class="font-display" style="font-weight:800;font-size:clamp(2.2rem,5vw,3.75rem);line-height:1.1;margin-bottom:1.5rem;">
+            Crédito, arrendamiento y seguros.<br />
+            <span class="gold-text">Sin complicaciones.</span>
+          </h1>
+          <p style="color:#9aa0a6;font-size:1.1rem;margin-bottom:2rem;max-width:480px;line-height:1.7;">
+            En AVAFS somos tu intermediario automotriz integral. Gestionamos el crédito, arrendamiento, seguro y trámites de tu auto ante múltiples instituciones para que obtengas la mejor opción, sin que muevas un dedo.
+          </p>
+          <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+            <a href="https://wa.me/525525374608?text=%C2%A1Hola%21%20Me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20sobre%3A" target="_blank" rel="noreferrer" class="btn-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#050507" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Solicitar asesoría
+            </a>
+            <button onclick="scrollToSection('servicios')" class="btn-ghost">Ver servicios <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+          <div style="margin-top:2.5rem;display:flex;gap:2rem;flex-wrap:wrap;">
+            <div><div class="font-display gold-text" style="font-weight:800;font-size:1.5rem;">8+</div><div style="color:#5f6368;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;">Financieras aliadas</div></div>
+            <div><div class="font-display gold-text" style="font-weight:800;font-size:1.5rem;">10+</div><div style="color:#5f6368;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;">Aseguradoras</div></div>
+            <div><div class="font-display gold-text" style="font-weight:800;font-size:1.5rem;">500+</div><div style="color:#5f6368;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;">Trámites gestionados</div></div>
+          </div>
+        </div>
+
+        <!-- Right - Car visual -->
+        <div class="float-hero reveal-anim" style="position:relative;display:flex;justify-content:center;">
+          <div style="position:relative;background:linear-gradient(135deg,rgba(15,16,21,.8),rgba(22,23,29,.6));border:1px solid rgba(110,160,255,.2);border-radius:1.5rem;padding:2.5rem;backdrop-filter:blur(20px);box-shadow:0 0 60px -10px rgba(45,114,244,.35);">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:1.5rem;">
+              <div style="width:120px;height:120px;background:linear-gradient(135deg,rgba(45,114,244,.2),rgba(110,160,255,.1));border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(110,160,255,.3);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#6ea0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15h20M4 15l2-7h12l2 7M4 15v4a1 1 0 001 1h2a1 1 0 001-1v-1h8v1a1 1 0 001 1h2a1 1 0 001-1v-4M10 8h4"/><circle cx="7" cy="15" r="1"/><circle cx="17" cy="15" r="1"/></svg>
+              </div>
+              <div style="width:100%;height:4px;border-radius:2px;background:#16171d;overflow:hidden;position:relative;">
+                <div class="road-stripes" style="position:absolute;inset:0;"></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;width:100%;">
+                <div style="background:rgba(45,114,244,.06);border:1px solid rgba(110,160,255,.15);border-radius:.75rem;padding:.75rem;display:flex;flex-direction:column;gap:.25rem;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6ea0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                  <div style="font-size:.75rem;font-weight:700;color:#e8eaed;">Seguro</div><div style="font-size:.65rem;color:#2d72f4;font-weight:600;">Gestionado</div>
+                </div>
+                <div style="background:rgba(45,114,244,.06);border:1px solid rgba(110,160,255,.15);border-radius:.75rem;padding:.75rem;display:flex;flex-direction:column;gap:.25rem;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6ea0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="10" cy="16" r="2"/><path d="M12 16h4"/></svg>
+                  <div style="font-size:.75rem;font-weight:700;color:#e8eaed;">Arrendamiento</div><div style="font-size:.65rem;color:#2d72f4;font-weight:600;">Disponible</div>
+                </div>
+                <div style="background:rgba(45,114,244,.06);border:1px solid rgba(110,160,255,.15);border-radius:.75rem;padding:.75rem;display:flex;flex-direction:column;gap:.25rem;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6ea0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15h20M4 15l2-7h12l2 7M4 15v4a1 1 0 001 1h2a1 1 0 001-1v-1h8v1a1 1 0 001 1h2a1 1 0 001-1v-4M10 8h4"/><circle cx="7" cy="15" r="1"/><circle cx="17" cy="15" r="1"/></svg>
+                  <div style="font-size:.75rem;font-weight:700;color:#e8eaed;">Crédito</div><div style="font-size:.65rem;color:#2d72f4;font-weight:600;">Aprobado</div>
+                </div>
+                <div style="background:rgba(45,114,244,.06);border:1px solid rgba(110,160,255,.15);border-radius:.75rem;padding:.75rem;display:flex;flex-direction:column;gap:.25rem;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6ea0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M10.5 12.5l1.5 1.5 3-3"/></svg>
+                  <div style="font-size:.75rem;font-weight:700;color:#e8eaed;">Trámites</div><div style="font-size:.65rem;color:#2d72f4;font-weight:600;">En proceso</div>
+                </div>
+              </div>
+            </div>
+            <div style="position:absolute;bottom:1.5rem;left:0;right:0;height:2px;overflow:hidden;opacity:.4;">
+              <div class="speed-streak" style="position:absolute;height:100%;width:30%;background:linear-gradient(90deg,transparent,#6ea0ff,transparent);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div style="overflow:hidden;background:rgba(45,114,244,.06);border-top:1px solid rgba(110,160,255,.12);border-bottom:1px solid rgba(110,160,255,.12);padding:.875rem 0;">
+    <div class="marquee-track" id="marquee-track"></div>
+  </div>
+
+  <!-- SERVICES -->
+  <section id="servicios" style="position:relative;padding:6rem 1.5rem;z-index:10;">
+    <div style="max-width:1280px;margin:0 auto;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-bottom:3rem;align-items:start;">
+        <div>
+          <div class="tag-pill" style="margin-bottom:1rem;">Servicios</div>
+          <h2 class="font-display" style="font-weight:800;font-size:clamp(2rem,4vw,3.5rem);line-height:1.1;margin-bottom:1.5rem;">
+            Cinco servicios.<br /><span class="gold-text">Un solo intermediario.</span>
+          </h2>
+        </div>
+        <p style="color:#cbd5e1;font-size:1.05rem;line-height:1.7;">Como broker independiente, no representamos a una sola institución: trabajamos con una red de financieras, aseguradoras y autoridades para conseguirte la mejor opción. Tú eliges, nosotros gestionamos.</p>
+      </div>
+      <div id="services-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:1.5rem;"></div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- STATS -->
+  <section style="padding:5rem 1.5rem;position:relative;z-index:10;">
+    <div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:2rem;" id="stats-grid"></div>
+  </section>
+
+  <!-- WHY -->
+  <section id="por-que" style="background:var(--bg-2);padding:6rem 1.5rem;position:relative;z-index:10;">
+    <div style="max-width:1280px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:4rem;">
+        <div class="tag-pill" style="margin-bottom:1rem;">Por qué AVAFS</div>
+        <h2 class="font-display" style="font-weight:800;font-size:clamp(2rem,4vw,3rem);margin-bottom:1rem;">La diferencia de trabajar <span class="gold-text">con un broker</span></h2>
+        <p style="color:#9aa0a6;max-width:600px;margin:0 auto;font-size:1.05rem;">No somos el vendedor del banco ni el agente de la aseguradora. Somos tu representante para conseguirte lo que más te conviene.</p>
+      </div>
+      <div id="why-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;"></div>
+    </div>
+  </section>
+
+  <!-- PROCESO -->
+  <section id="proceso" style="padding:6rem 1.5rem;position:relative;z-index:10;">
+    <div style="max-width:1280px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:4rem;">
+        <div class="tag-pill" style="margin-bottom:1rem;">Proceso</div>
+        <h2 class="font-display" style="font-weight:800;font-size:clamp(2rem,4vw,3rem);margin-bottom:1rem;">Así de <span class="gold-text">simple es trabajar</span> con nosotros</h2>
+        <p style="color:#9aa0a6;font-size:1.05rem;">Cuatro pasos que transforman tu necesidad en una solución concreta.</p>
+      </div>
+      <div id="steps-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem;"></div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- COBERTURA -->
+  <section id="cobertura" style="padding:6rem 1.5rem;background:var(--bg-2);position:relative;z-index:10;">
+    <div style="max-width:1280px;margin:0 auto;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;" class="hero-grid">
+        <div>
+          <div class="tag-pill" style="margin-bottom:1rem;">Cobertura</div>
+          <h2 class="font-display" style="font-weight:800;font-size:clamp(2rem,4vw,3rem);margin-bottom:1.5rem;">Operamos desde <span class="gold-text">CDMX</span> con alcance nacional</h2>
+          <p style="color:#9aa0a6;margin-bottom:2rem;line-height:1.7;">Nuestras oficinas principales están en Colonia Anzures, CDMX. Los servicios de crédito, arrendamiento y seguros los gestionamos en toda la República. Los trámites vehiculares actualmente tienen cobertura principal en Morelos.</p>
+          <div style="display:flex;flex-direction:column;gap:1rem;">
+            <div style="display:flex;align-items:center;gap:.75rem;"><div style="width:12px;height:12px;border-radius:50%;background:#2d72f4;flex-shrink:0;"></div><span style="font-size:.9rem;color:#9aa0a6;">Crédito, arrendamiento y seguros — Nacional</span></div>
+            <div style="display:flex;align-items:center;gap:.75rem;"><div style="width:12px;height:12px;border-radius:50%;background:#6ea0ff;flex-shrink:0;"></div><span style="font-size:.9rem;color:#9aa0a6;">Trámites vehiculares — Morelos (expansión próxima)</span></div>
+            <div style="display:flex;align-items:center;gap:.75rem;"><div style="width:12px;height:12px;border-radius:50%;background:#5f6368;flex-shrink:0;"></div><span style="font-size:.9rem;color:#9aa0a6;">Próximos estados — En expansión</span></div>
+          </div>
+        </div>
+        <div style="position:relative;background:linear-gradient(135deg,rgba(15,16,21,.8),rgba(22,23,29,.6));border:1px solid rgba(110,160,255,.2);border-radius:1.5rem;padding:2rem;min-height:320px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1.5rem;">
+          <div style="font-size:5rem;">🇲🇽</div>
+          <div style="text-align:center;">
+            <div style="color:#6ea0ff;font-weight:700;font-size:1.1rem;">México</div>
+            <div style="color:#5f6368;font-size:.85rem;">Crédito y seguros — toda la República</div>
+          </div>
+          <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+            <span style="background:rgba(45,114,244,.15);border:1px solid rgba(110,160,255,.3);border-radius:9999px;padding:.25rem .875rem;font-size:.8rem;color:#6ea0ff;font-weight:600;">CDMX</span>
+            <span style="background:rgba(45,114,244,.15);border:1px solid rgba(110,160,255,.3);border-radius:9999px;padding:.25rem .875rem;font-size:.8rem;color:#6ea0ff;font-weight:600;">Morelos</span>
+            <span style="background:rgba(95,99,104,.1);border:1px solid rgba(95,99,104,.2);border-radius:9999px;padding:.25rem .875rem;font-size:.8rem;color:#5f6368;font-weight:600;">Jalisco</span>
+            <span style="background:rgba(95,99,104,.1);border:1px solid rgba(95,99,104,.2);border-radius:9999px;padding:.25rem .875rem;font-size:.8rem;color:#5f6368;font-weight:600;">Nuevo León</span>
+            <span style="background:rgba(95,99,104,.1);border:1px solid rgba(95,99,104,.2);border-radius:9999px;padding:.25rem .875rem;font-size:.8rem;color:#5f6368;font-weight:600;">+ próximamente</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALES -->
+  <section style="padding:6rem 1.5rem;position:relative;z-index:10;">
+    <div style="max-width:1280px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:3rem;">
+        <div class="tag-pill" style="margin-bottom:1rem;">Testimonios</div>
+        <h2 class="font-display" style="font-weight:800;font-size:clamp(2rem,4vw,3rem);">Lo que dicen <span class="gold-text">nuestros clientes</span></h2>
+      </div>
+      <div style="overflow:hidden;">
+        <div id="testimonial-slider" style="display:flex;transition:transform .8s cubic-bezier(.16,1,.3,1);"></div>
+      </div>
+      <div id="testimonial-dots" style="display:flex;justify-content:center;gap:.5rem;margin-top:1.5rem;"></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" style="background:var(--bg-2);padding:6rem 1.5rem;position:relative;z-index:10;">
+    <div style="max-width:800px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:3rem;">
+        <div class="tag-pill" style="margin-bottom:1rem;">FAQ</div>
+        <h2 class="font-display" style="font-weight:800;font-size:clamp(2rem,4vw,3rem);">Preguntas <span class="gold-text">frecuentes</span></h2>
+      </div>
+      <div id="faq-list"></div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <section style="padding:5rem 1.5rem;position:relative;overflow:hidden;z-index:10;">
+    <img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=1600&q=80&fit=crop" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.07;" />
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(45,114,244,.15) 0%,transparent 70%);"></div>
+    <div style="max-width:800px;margin:0 auto;text-align:center;position:relative;z-index:1;">
+      <h2 class="font-display shine-text" style="font-weight:800;font-size:clamp(2rem,4vw,3rem);margin-bottom:1rem;">¿Listo para encontrar tu mejor opción?</h2>
+      <p style="color:#9aa0a6;font-size:1.1rem;margin-bottom:2rem;">Contáctanos hoy. Sin compromisos, sin letra chica. Solo la mejor opción para ti.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="https://wa.me/525525374608?text=%C2%A1Hola%21%20Me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20sobre%3A" target="_blank" rel="noreferrer" class="btn-primary">Escribir por WhatsApp</a>
+        <button onclick="scrollToSection('contacto')" class="btn-ghost">Formulario de contacto</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" style="background:var(--bg-2);padding:6rem 1.5rem;position:relative;z-index:10;">
+    <div style="max-width:1280px;margin:0 auto;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;" class="hero-grid">
+        <div>
+          <div class="tag-pill" style="margin-bottom:1rem;">Contacto</div>
+          <h2 class="font-display" style="font-weight:800;font-size:clamp(2rem,4vw,3rem);margin-bottom:1.5rem;">Hablemos de <span class="gold-text">tu caso</span></h2>
+          <p style="color:#9aa0a6;margin-bottom:2.5rem;line-height:1.7;">Cuéntanos qué necesitas y te respondemos en menos de 24 horas con una propuesta real. Sin rodeos, sin compromisos.</p>
+          <div style="display:flex;flex-direction:column;gap:1.25rem;">
+            <div style="display:flex;align-items:flex-start;gap:.75rem;">
+              <div style="flex-shrink:0;margin-top:2px;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6ea0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 0C5.373 0 0 5.373 0 12c0 2.117.554 4.1 1.523 5.819L.057 23.428a.5.5 0 00.609.61l5.71-1.494A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.626 0 11.999 0zm0 21.818a9.808 9.808 0 01-5.001-1.373l-.358-.214-3.724.976.995-3.63-.234-.374A9.786 9.786 0 012.182 12c0-5.413 4.404-9.818 9.818-9.818 5.413 0 9.818 4.405 9.818 9.818 0 5.414-4.405 9.818-9.818 9.818z"/></svg></div>
+              <a href="https://wa.me/525525374608" target="_blank" rel="noreferrer" class="contact-link">(+52) 55 2537 4608</a>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:.75rem;">
+              <div style="flex-shrink:0;margin-top:2px;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6ea0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+              <a href="mailto:info@avafs.com.mx" class="contact-link">info@avafs.com.mx</a>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:.75rem;">
+              <div style="flex-shrink:0;margin-top:2px;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6ea0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg></div>
+              <a href="https://www.avafs.com.mx" target="_blank" rel="noreferrer" class="contact-link">www.avafs.com.mx</a>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:.75rem;">
+              <div style="flex-shrink:0;margin-top:2px;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6ea0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+              <span style="color:#9aa0a6;font-size:.95rem;">Gral. Mariano Escobedo 526, Anzures, Miguel Hidalgo, 11590 CDMX</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:1.25rem;padding:2rem;">
+          <div id="form-success" style="display:none;text-align:center;padding:3rem 0;">
+            <div style="width:64px;height:64px;background:rgba(45,114,244,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6ea0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <h3 style="font-weight:700;font-size:1.25rem;margin-bottom:.5rem;">¡Mensaje enviado!</h3>
+            <p style="color:#9aa0a6;">Te contactaremos en menos de 24 horas.</p>
+            <button onclick="resetForm()" class="btn-ghost" style="margin-top:1.5rem;">Enviar otro mensaje</button>
+          </div>
+          <div id="form-fields" style="display:flex;flex-direction:column;gap:1rem;">
+            <h3 class="font-display" style="font-weight:700;font-size:1.25rem;margin-bottom:.5rem;">Solicitar asesoría gratuita</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <input class="input-field" id="f-nombre" placeholder="Nombre completo" type="text" />
+              <input class="input-field" id="f-email" placeholder="Correo electrónico" type="email" />
+            </div>
+            <input class="input-field" id="f-telefono" placeholder="Teléfono" type="text" />
+            <select class="input-field" id="f-servicio" style="appearance:none;">
+              <option value="">¿Qué servicio necesitas?</option>
+              <option value="credito">Crédito automotriz</option>
+              <option value="arrendamiento">Arrendamiento puro</option>
+              <option value="seguro">Seguros vehiculares</option>
+              <option value="tramites">Trámites vehiculares</option>
+              <option value="publicar">Publicar mi auto</option>
+              <option value="otro">Otro / No sé aún</option>
+            </select>
+            <textarea class="input-field" id="f-mensaje" placeholder="Cuéntanos sobre tu caso..." rows="4" style="resize:vertical;"></textarea>
+            <button onclick="handleForm()" class="btn-primary" style="width:100%;justify-content:center;">Enviar solicitud <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+            <p style="color:#5f6368;font-size:.8rem;text-align:center;">Sin costos ocultos. Sin compromisos. Respuesta en 24 horas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="background:#000;border-top:1px solid rgba(110,160,255,.08);padding:4rem 1.5rem 2rem;">
+    <div style="max-width:1280px;margin:0 auto;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:3rem;margin-bottom:3rem;">
+        <div>
+          <div style="display:flex;align-items:center;margin-bottom:1rem;">
+            <img src="data:image/png;base64,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" alt="AVAFS" style="height:56px;width:auto;object-fit:contain;" />
+          </div>
+          <p style="color:#64748b;font-size:.875rem;line-height:1.7;">Broker automotriz con oficinas en CDMX y operaciones en Morelos. Intermediamos crédito, arrendamiento, seguros y trámites vehiculares.</p>
+        </div>
+        <div>
+          <div style="color:#5f6368;font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;margin-bottom:1rem;">Servicios</div>
+          <div style="margin-bottom:.5rem;"><button onclick="scrollToSection('servicios')" class="footer-link">Crédito automotriz</button></div>
+          <div style="margin-bottom:.5rem;"><button onclick="scrollToSection('servicios')" class="footer-link">Arrendamiento puro</button></div>
+          <div style="margin-bottom:.5rem;"><button onclick="scrollToSection('servicios')" class="footer-link">Seguros vehiculares</button></div>
+          <div style="margin-bottom:.5rem;"><button onclick="scrollToSection('servicios')" class="footer-link">Trámites vehiculares</button></div>
+          <div style="margin-bottom:.5rem;"><button onclick="scrollToSection('servicios')" class="footer-link">Publica tu auto</button></div>
+        </div>
+        <div>
+          <div style="color:#5f6368;font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;margin-bottom:1rem;">Empresa</div>
+          <div style="margin-bottom:.5rem;"><button onclick="scrollToSection('por-que')" class="footer-link">Por qué AVAFS</button></div>
+          <div style="margin-bottom:.5rem;"><button onclick="scrollToSection('proceso')" class="footer-link">Cómo trabajamos</button></div>
+          <div style="margin-bottom:.5rem;"><button onclick="scrollToSection('cobertura')" class="footer-link">Cobertura</button></div>
+          <div style="margin-bottom:.5rem;"><button onclick="scrollToSection('faq')" class="footer-link">Preguntas frecuentes</button></div>
+          <div style="margin-bottom:.5rem;"><button onclick="scrollToSection('contacto')" class="footer-link">Contacto</button></div>
+        </div>
+        <div>
+          <div style="color:#5f6368;font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;margin-bottom:1rem;">Contacto</div>
+          <div style="display:flex;align-items:flex-start;gap:.5rem;margin-bottom:.75rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6ea0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967c-.273-.099-.471-.148-.67.15c-.197.297-.767.966-.94 1.164c-.173.199-.347.223-.644.075c-.297-.15-1.255-.463-2.39-1.475c-.883-.788-1.48-1.761-1.653-2.059c-.173-.297-.018-.458.13-.606c.134-.133.298-.347.446-.52c.149-.174.198-.298.298-.497c.099-.198.05-.371-.025-.52c-.075-.149-.669-1.612-.916-2.207c-.242-.579-.487-.5-.669-.51c-.173-.008-.371-.01-.57-.01c-.198 0-.52.074-.792.372c-.272.297-1.04 1.016-1.04 2.479c0 1.462 1.065 2.875 1.213 3.074c.149.198 2.096 3.2 5.077 4.487c.709.306 1.262.489 1.694.625c.712.227 1.36.195 1.871.118c.571-.085 1.758-.719 2.006-1.413c.248-.694.248-1.289.173-1.413c-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 0C5.373 0 0 5.373 0 12c0 2.117.554 4.1 1.523 5.819L.057 23.428a.5.5 0 00.609.61l5.71-1.494A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.626 0 11.999 0z"/></svg>
+            <a href="https://wa.me/525525374608" target="_blank" rel="noreferrer" style="color:#94a3b8;font-size:.875rem;text-decoration:none;">(+52) 55 2537 4608</a>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:.5rem;margin-bottom:.75rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6ea0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <a href="mailto:info@avafs.com.mx" style="color:#6ea0ff;font-size:.875rem;text-decoration:none;">info@avafs.com.mx</a>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:.5rem;margin-bottom:.75rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6ea0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+            <a href="https://www.avafs.com.mx" target="_blank" rel="noreferrer" style="color:#6ea0ff;font-size:.875rem;text-decoration:none;">www.avafs.com.mx</a>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:.5rem;margin-bottom:.75rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6ea0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span style="color:#94a3b8;font-size:.875rem;">Anzures, Miguel Hidalgo, CDMX</span>
+          </div>
+        </div>
+      </div>
+      <div style="padding-top:1.5rem;border-top:1px solid rgba(45,114,244,.08);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:.85rem;color:#5f6368;">
+        <div>© <span id="footer-year"></span> AVAFS. Todos los derechos reservados.</div>
+        <div style="display:flex;gap:1.5rem;">
+          <span style="cursor:pointer;">Aviso de privacidad</span>
+          <span style="cursor:pointer;">Términos y condiciones</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <style>
+    .nav-link-btn { background:none;border:none;color:#9aa0a6;cursor:pointer;font-size:.875rem;font-family:'Manrope',sans-serif;transition:color .2s; }
+    .nav-link-btn:hover { color:#e8eaed; }
+    .mobile-nav-btn { background:none;border:none;color:#e8eaed;cursor:pointer;font-size:1.25rem;font-family:'Manrope',sans-serif;text-align:left;font-weight:600; }
+    .footer-link { background:none;border:none;color:#94a3b8;cursor:pointer;font-family:'Manrope',sans-serif;font-size:.875rem;padding:0;transition:color .2s; }
+    .footer-link:hover { color:#e8eaed; }
+    .contact-link { color:#9aa0a6;font-size:.95rem;text-decoration:none;transition:color .2s; }
+    .contact-link:hover { color:#6ea0ff; }
+  </style>
+
+  <script>
+    // ── Data ──────────────────────────────────────────────────────────────────
+    const ACCENT = '#2d72f4';
+    const ACCENT2 = '#6ea0ff';
+
+    const services = [
+      { icon: 'car-front', title: 'Crédito Automotriz', tag: 'Servicio principal', desc: 'Intermediamos tu crédito ante múltiples instituciones financieras para conseguir las mejores tasas, plazos y enganches. Aplicamos por ti en varios lugares a la vez y te presentamos la mejor oferta real.', checks: ['Auto nuevo y seminuevo', 'Personas físicas y morales', 'Comparativa entre financieras', 'Respuesta en 24–48 horas'] },
+      { icon: 'file-key', title: 'Arrendamiento Puro', desc: 'Renta tu vehículo a plazos con beneficios fiscales. Ideal para empresas y profesionistas que quieren un auto nuevo cada cierto periodo sin comprometer capital.', checks: ['Beneficios fiscales', 'Plazos 24–48 meses', 'Opción de compra al final'] },
+      { icon: 'shield-check', title: 'Seguros Vehiculares', desc: 'Como intermediarios entre varias aseguradoras, comparamos coberturas y precios para encontrar la protección ideal para tu auto y tu presupuesto.', checks: ['Cobertura amplia y limitada', 'Comparativa entre +10 aseguradoras', 'Renovación anual gestionada'] },
+      { icon: 'file-check-2', title: 'Trámites Vehiculares', desc: 'Gestionamos tus trámites vehiculares de principio a fin. Cobertura principal en Morelos y próximamente en más estados de la República.', checks: ['Altas, bajas y cambios de placa', 'Tarjeta de circulación', 'Tenencia y refrendos'], note: 'Cobertura: Morelos · Expansión próximamente' },
+      { icon: 'megaphone', title: 'Publica tu Auto', desc: '¿Quieres vender tu auto? Publica con nosotros y te conectamos con compradores serios. Te asesoramos en el precio justo y en todo el proceso.', checks: ['Valuación de mercado', 'Publicación en nuestra red', 'Filtrado de compradores'] },
+    ];
+
+    const whyCards = [
+      { icon: 'building', title: 'Independencia total', desc: 'No somos concesionario ni financiera. Trabajamos para ti, no para las instituciones. Eso nos da libertad de elegir la mejor opción sin compromisos.' },
+      { icon: 'trending-up', title: 'Comparativa real', desc: 'Aplicamos con múltiples entidades simultáneamente y te mostramos los resultados reales con números claros. Sin letra chica, sin sorpresas.' },
+      { icon: 'clock', title: 'Respuesta rápida', desc: 'Entendemos que tu tiempo vale. Nos comprometemos a darte respuesta en 24 a 48 horas hábiles con una propuesta concreta y accionable.' },
+      { icon: 'users', title: 'Asesoría personalizada', desc: 'Cada cliente es diferente. Analizamos tu perfil, necesidades y presupuesto para ofrecerte soluciones hechas a tu medida, no productos genéricos.' },
+      { icon: 'award', title: 'Experiencia y red', desc: 'Años de experiencia y una red consolidada de instituciones financieras, aseguradoras y autoridades nos permiten gestionar casi cualquier caso.' },
+      { icon: 'check-circle', title: 'Transparencia total', desc: 'Sabes en todo momento qué se está haciendo con tu expediente. Te mantenemos informado en cada etapa del proceso, sin excusas ni silencios.' },
+    ];
+
+    const steps = [
+      { num: '01', title: 'Cuéntanos tu caso', desc: 'Contáctanos por WhatsApp, teléfono o formulario. Cuéntanos qué necesitas, qué auto te interesa o qué trámite quieres resolver.' },
+      { num: '02', title: 'Analizamos tu perfil', desc: 'Revisamos tu situación financiera, historial crediticio y necesidades para preparar la estrategia más efectiva para tu caso particular.' },
+      { num: '03', title: 'Gestionamos todo', desc: 'Aplicamos con las instituciones más convenientes para ti. Coordinamos citas, documentos y seguimiento para que no tengas que hacer nada extra.' },
+      { num: '04', title: 'Tú decides, nosotros cerramos', desc: 'Te presentamos las mejores opciones disponibles. Tú eliges con información completa y nosotros cerramos el trámite hasta el final.' },
+    ];
+
+    const testimonials = [
+      { name: 'Rodrigo M.', role: 'Empresario, CDMX', text: 'AVAFS me consiguió un crédito automotriz con una tasa que ningún banco me había ofrecido directamente. El proceso fue rápido y transparente.', rating: 5 },
+      { name: 'Sofía G.', role: 'Arquitecta, Morelos', text: 'Contraté mi seguro a través de AVAFS y ahorraron tiempo y dinero comparado con ir yo sola a cada aseguradora. Super recomendados.', rating: 5 },
+      { name: 'Carlos B.', role: 'Director Financiero', text: 'Para el arrendamiento de la flotilla de la empresa, AVAFS fue clave. Nos explicaron todo, gestionaron los contratos y los beneficios fiscales fueron reales.', rating: 5 },
+    ];
+
+    const faqs = [
+      { q: '¿AVAFS cobra comisión directa al cliente?', a: 'No. AVAFS recibe comisión de las instituciones con las que trabaja (financieras, aseguradoras), no del cliente. Para ti, el servicio de gestión y asesoría es sin costo adicional.' },
+      { q: '¿Qué requisitos necesito para un crédito automotriz?', a: 'En general: identificación oficial, comprobante de ingresos, comprobante de domicilio e historial crediticio. Los requisitos específicos varían según la institución. Nosotros te orientamos desde el inicio.' },
+      { q: '¿Trabajan con personas que tienen buró de crédito negativo?', a: 'Depende del caso. Tenemos instituciones aliadas con criterios más flexibles. Lo analizamos individualmente y te decimos honestamente qué opciones existen para tu perfil.' },
+      { q: '¿En cuánto tiempo tengo respuesta de mi crédito?', a: 'Generalmente entre 24 y 48 horas hábiles desde que entregamos tu expediente completo. En casos complejos puede tomar un poco más, pero siempre te mantenemos informado.' },
+      { q: '¿Los trámites vehiculares solo los hacen en Morelos?', a: 'Actualmente nuestra cobertura principal de trámites vehiculares es en Morelos. Estamos en proceso de expansión a más estados. Consulta tu caso específico para orientarte.' },
+      { q: '¿Puedo contratar varios servicios al mismo tiempo?', a: 'Sí. Muchos clientes nos contratan crédito + seguro al mismo tiempo, o seguro + trámite. Al ser su intermediario en todo, simplificamos la gestión enormemente.' },
+    ];
+
+    const marqueeItems = ['Crédito Automotriz', 'Arrendamiento Puro', 'Seguros Vehiculares', 'Trámites Vehiculares', 'Publica tu Auto', 'Broker Independiente', 'CDMX · Morelos'];
+
+    const statsData = [
+      { target: 8, suffix: '+', label: 'Financieras aliadas', delay: '0s' },
+      { target: 10, suffix: '+', label: 'Aseguradoras', delay: '.6s' },
+      { target: 500, suffix: '+', label: 'Trámites gestionados', delay: '1.2s' },
+      { target: 100, suffix: '%', label: 'Transparencia en cada gestión', delay: '1.8s' },
+    ];
+
+    // ── SVG Icons ─────────────────────────────────────────────────────────────
+    function icon(name, size=20, color='currentColor') {
+      const paths = {
+        'car-front': '<path d="M2 15h20M4 15l2-7h12l2 7M4 15v4a1 1 0 001 1h2a1 1 0 001-1v-1h8v1a1 1 0 001 1h2a1 1 0 001-1v-4M10 8h4"/><circle cx="7" cy="15" r="1"/><circle cx="17" cy="15" r="1"/>',
+        'file-key': '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="10" cy="16" r="2"/><path d="M12 16h4"/>',
+        'shield-check': '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>',
+        'file-check-2': '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M10.5 12.5l1.5 1.5 3-3"/>',
+        'megaphone': '<path d="M3 11l19-9-9 19-2-8-8-2z"/>',
+        'check': '<polyline points="20 6 9 16 4 11"/>',
+        'arrow-up-right': '<line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/>',
+        'arrow-right': '<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>',
+        'map-pin': '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>',
+        'building': '<rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 21V9"/><path d="M16 21V9"/><path d="M6 9h12"/><path d="M6 13h4"/><path d="M14 13h4"/><path d="M6 17h4"/><path d="M14 17h4"/>',
+        'trending-up': '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+        'clock': '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+        'users': '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>',
+        'award': '<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>',
+        'check-circle': '<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+        'star': '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+      };
+      return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths[name]||''}</svg>`;
+    }
+
+    // ── Scroll ─────────────────────────────────────────────────────────────────
+    function scrollToSection(id) {
+      closeMenu();
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ── Nav scroll effect ──────────────────────────────────────────────────────
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('main-nav');
+      if (window.scrollY > 30) {
+        nav.style.background = 'rgba(5,5,7,.92)';
+        nav.style.backdropFilter = 'blur(24px)';
+        nav.style.borderBottom = '1px solid rgba(110,160,255,.14)';
+      } else {
+        nav.style.background = 'transparent';
+        nav.style.backdropFilter = 'none';
+        nav.style.borderBottom = 'none';
+      }
+    });
+
+    // ── Mobile menu ────────────────────────────────────────────────────────────
+    function openMenu() { document.getElementById('mobile-menu').style.display = 'block'; }
+    function closeMenu() { document.getElementById('mobile-menu').style.display = 'none'; }
+
+    // ── Marquee ────────────────────────────────────────────────────────────────
+    (function buildMarquee() {
+      const track = document.getElementById('marquee-track');
+      const all = [...marqueeItems, ...marqueeItems];
+      track.innerHTML = all.map(item => `
+        <span style="flex-shrink:0;display:flex;align-items:center;gap:1.5rem;padding-right:3rem;color:#6ea0ff;font-size:.85rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;">
+          <span style="width:4px;height:4px;background:#2d72f4;border-radius:50%;flex-shrink:0;"></span>
+          ${item}
+        </span>
+      `).join('');
+    })();
+
+    // ── Services ───────────────────────────────────────────────────────────────
+    (function buildServices() {
+      const grid = document.getElementById('services-grid');
+      grid.innerHTML = services.map(s => `
+        <div class="service-card" style="padding:2rem;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.5rem;">
+            <div style="width:56px;height:56px;border-radius:.75rem;background:rgba(110,160,255,.1);color:${ACCENT};display:flex;align-items:center;justify-content:center;transition:all .5s;">
+              ${icon(s.icon, 28)}
+            </div>
+            ${icon('arrow-up-right', 22, ACCENT2)}
+          </div>
+          ${s.tag ? `<div class="tag-pill" style="margin-bottom:1rem;">${s.tag}</div>` : ''}
+          <h3 class="font-display" style="font-weight:700;font-size:1.4rem;margin-bottom:.75rem;">${s.title}</h3>
+          <p style="color:#cbd5e1;margin-bottom:1.25rem;font-size:.95rem;">${s.desc}</p>
+          <div style="display:grid;grid-template-columns:${s.checks.length > 3 ? '1fr 1fr' : '1fr'};gap:.5rem;">
+            ${s.checks.map(c => `
+              <div style="display:flex;align-items:center;gap:.5rem;font-size:.875rem;color:#cbd5e1;">
+                ${icon('check', 16, ACCENT2)}
+                ${c}
+              </div>
+            `).join('')}
+          </div>
+          ${s.note ? `
+            <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(45,114,244,.1);display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:#6ea0ff;font-weight:700;text-transform:uppercase;letter-spacing:.05em;">
+              ${icon('map-pin', 13, ACCENT2)}
+              ${s.note}
+            </div>` : ''}
+        </div>
+      `).join('');
+    })();
+
+    // ── Stats counter ──────────────────────────────────────────────────────────
+    function animateCounter(el, target, suffix) {
+      const t0 = performance.now();
+      const tick = (now) => {
+        const p = Math.min((now - t0) / 1800, 1);
+        const v = Math.floor((1 - Math.pow(1 - p, 3)) * target);
+        el.textContent = v + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = target + suffix;
+      };
+      requestAnimationFrame(tick);
+    }
+
+    (function buildStats() {
+      const grid = document.getElementById('stats-grid');
+      grid.innerHTML = statsData.map((s, i) => `
+        <div class="stat-item" data-target="${s.target}" data-suffix="${s.suffix}" style="animation-delay:${s.delay};">
+          <div class="font-display gold-text stat-number" style="font-weight:800;font-size:clamp(2.5rem,6vw,3.5rem);">0${s.suffix}</div>
+          <div style="color:#9aa0a6;font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;margin-top:.5rem;">${s.label}</div>
+        </div>
+      `).join('');
+
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target.querySelector('.stat-number');
+            const target = +entry.target.dataset.target;
+            const suffix = entry.target.dataset.suffix;
+            animateCounter(el, target, suffix);
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+
+      grid.querySelectorAll('.stat-item').forEach(el => obs.observe(el));
+    })();
+
+    // ── Why cards ──────────────────────────────────────────────────────────────
+    (function buildWhy() {
+      const grid = document.getElementById('why-grid');
+      grid.innerHTML = whyCards.map((c, i) => `
+        <div class="why-card why-${(i % 6) + 1}">
+          <div style="width:48px;height:48px;border-radius:.75rem;background:rgba(45,114,244,.1);color:${ACCENT2};display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+            ${icon(c.icon, 22, ACCENT2)}
+          </div>
+          <h3 style="font-weight:700;font-size:1.1rem;margin-bottom:.5rem;">${c.title}</h3>
+          <p style="color:#9aa0a6;font-size:.9rem;line-height:1.6;">${c.desc}</p>
+        </div>
+      `).join('');
+    })();
+
+    // ── Steps ──────────────────────────────────────────────────────────────────
+    (function buildSteps() {
+      const grid = document.getElementById('steps-grid');
+      grid.innerHTML = steps.map((s, i) => `
+        <div class="process-step" style="background:var(--card);border:1px solid var(--border);border-radius:1rem;padding:2rem;animation-delay:${i * .7}s;">
+          <div style="width:52px;height:52px;border-radius:.75rem;background:rgba(45,114,244,.1);border:1px solid rgba(110,160,255,.25);display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:800;font-size:1.1rem;color:${ACCENT2};margin-bottom:1.25rem;transition:all .5s;">
+            ${s.num}
+          </div>
+          <h3 style="font-weight:700;font-size:1.1rem;margin-bottom:.75rem;">${s.title}</h3>
+          <p style="color:#9aa0a6;font-size:.9rem;line-height:1.6;">${s.desc}</p>
+        </div>
+      `).join('');
+    })();
+
+    // ── Testimonials ───────────────────────────────────────────────────────────
+    let testimonialIdx = 0;
+
+    function buildTestimonials() {
+      const slider = document.getElementById('testimonial-slider');
+      const dots = document.getElementById('testimonial-dots');
+
+      slider.innerHTML = testimonials.map(t => `
+        <div class="testimonial-card" style="margin:0 .75rem;flex-shrink:0;width:calc(100% - 1.5rem);">
+          <div style="display:flex;gap:.25rem;margin-bottom:1rem;">
+            ${Array(t.rating).fill(0).map(() => icon('star', 16, '#f59e0b')).join('')}
+          </div>
+          <p style="color:#cbd5e1;font-size:1.05rem;line-height:1.7;margin-bottom:1.5rem;font-style:italic;">"${t.text}"</p>
+          <div>
+            <div style="font-weight:700;color:#e8eaed;">${t.name}</div>
+            <div style="color:#5f6368;font-size:.875rem;">${t.role}</div>
+          </div>
+        </div>
+      `).join('');
+
+      dots.innerHTML = testimonials.map((_, i) => `
+        <button onclick="setTestimonial(${i})" id="dot-${i}" style="height:8px;width:${i===0?28:8}px;border-radius:4px;background:${i===0?ACCENT:'#5f6368'};border:none;cursor:pointer;transition:all .3s;"></button>
+      `).join('');
+    }
+
+    function setTestimonial(i) {
+      testimonialIdx = i;
+      document.getElementById('testimonial-slider').style.transform = `translateX(-${i * 100}%)`;
+      testimonials.forEach((_, j) => {
+        const dot = document.getElementById('dot-' + j);
+        dot.style.width = j === i ? '28px' : '8px';
+        dot.style.background = j === i ? ACCENT : '#5f6368';
+      });
+    }
+
+    buildTestimonials();
+    setInterval(() => setTestimonial((testimonialIdx + 1) % testimonials.length), 6500);
+
+    // ── FAQ accordion ──────────────────────────────────────────────────────────
+    (function buildFaq() {
+      const list = document.getElementById('faq-list');
+      list.innerHTML = faqs.map((f, i) => `
+        <div class="accordion-item" id="faq-item-${i}" style="border-bottom:1px solid rgba(110,160,255,.12);">
+          <button onclick="toggleFaq(${i})" id="faq-btn-${i}" style="width:100%;background:transparent;border:none;padding:1.25rem 0;display:flex;align-items:center;justify-content:space-between;cursor:pointer;color:#e8eaed;font-family:Manrope,sans-serif;font-size:1rem;font-weight:600;text-align:left;">
+            ${f.q}
+            <span id="faq-icon-${i}" style="font-size:1.5rem;color:#5f6368;transition:transform .3s;flex-shrink:0;margin-left:1rem;">+</span>
+          </button>
+          <div class="accordion-content" id="faq-content-${i}">
+            <p style="color:#9aa0a6;padding-bottom:1.25rem;font-size:.95rem;">${f.a}</p>
+          </div>
+        </div>
+      `).join('');
+    })();
+
+    function toggleFaq(i) {
+      const item = document.getElementById('faq-item-' + i);
+      const icon_ = document.getElementById('faq-icon-' + i);
+      const btn = document.getElementById('faq-btn-' + i);
+      const isOpen = item.classList.contains('accordion-open');
+      // close all
+      faqs.forEach((_, j) => {
+        document.getElementById('faq-item-' + j).classList.remove('accordion-open');
+        document.getElementById('faq-icon-' + j).style.transform = 'none';
+        document.getElementById('faq-icon-' + j).style.color = '#5f6368';
+        document.getElementById('faq-btn-' + j).style.color = '#e8eaed';
+      });
+      if (!isOpen) {
+        item.classList.add('accordion-open');
+        icon_.style.transform = 'rotate(45deg)';
+        icon_.style.color = '#2d72f4';
+        btn.style.color = '#6ea0ff';
+      }
+    }
+
+    // ── Contact form ───────────────────────────────────────────────────────────
+    async function handleForm() {
+      const nombre = document.getElementById('f-nombre').value;
+      const email = document.getElementById('f-email').value;
+      const telefono = document.getElementById('f-telefono').value;
+      const servicio = document.getElementById('f-servicio').value;
+      const mensaje = document.getElementById('f-mensaje').value;
+      if (!nombre || !email || !mensaje) return;
+      try {
+        await fetch('https://formsubmit.co/ajax/info@avafs.com.mx', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            nombre, email, telefono,
+            servicio: servicio || 'No especificado',
+            mensaje,
+            _subject: `Nueva solicitud de asesoría — ${nombre}`,
+            _captcha: 'false',
+          }),
+        });
+      } catch (_) {}
+      document.getElementById('form-fields').style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+    }
+
+    function resetForm() {
+      document.getElementById('f-nombre').value = '';
+      document.getElementById('f-email').value = '';
+      document.getElementById('f-telefono').value = '';
+      document.getElementById('f-servicio').value = '';
+      document.getElementById('f-mensaje').value = '';
+      document.getElementById('form-success').style.display = 'none';
+      document.getElementById('form-fields').style.display = 'flex';
+    }
+
+    // ── Footer year ────────────────────────────────────────────────────────────
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
